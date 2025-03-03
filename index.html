@@ -1,0 +1,174 @@
+﻿<!-- Alex Miller - ttt5.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe Part 1</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Tic Tac Toe Board</h1>
+    <br>
+    <div class="win">
+        <p>[Winner Here]</p>
+    </div>
+    <br>
+    <div class="turn">
+        <p>Random Turn Here</p> <!--first turn hard-coded to X or O randomly-->
+    </div>
+
+    <br>
+    <!--The Start/Reset Game Button-->
+    <button id="StartGameBtn">Start Game</button>
+    <br>
+
+    <div class="game">
+        <div class="gridjs">
+
+            <!--creating the new variables within the script-->
+            <script>
+                const NUM_SQUARES = 9;
+                for (var i = 0; i < NUM_SQUARES; i++) {
+                    var id = "sq" + i;
+                    document.write("<div class='square' id='" + id + "'></div>");
+                }
+            </script>
+
+        </div>
+    </div>
+
+    <!-- guess we'll need an UPDATED turn counter now to include random -->
+    <script>
+        //odd for X, even for O -- sounds good
+
+        //here 0 is random X or O
+        var turn = Math.floor(Math.random() * 2);
+
+        //don't want to keep trying to play if the game is over
+        var gameOver = false;
+
+        //updating player turn display, as before
+        function updateTurnDisplay() {
+            var turnDisplay = document.querySelector(".turn p");
+            if (turn % 2 === 0) {
+                turnDisplay.textContent = "It's X's turn!";
+            }
+            else {
+                turnDisplay.textContent = "It's O's turn!";
+            }
+        }
+
+        //Random player turn start
+        updateTurnDisplay();
+
+        for (let i = 0; i < 9; i++) {
+            let square = document.getElementById("sq" + i);
+            //the single event listener, but for both players now
+            square.addEventListener("click", function () {
+                //bye bye buggy popup, good riddance I don't need to fix it now
+
+                //"Hi, is this square still available?" - Facebook Marketplace
+                if (square.innerHTML.trim() !== "" || gameOver) {
+                    return; //disallow move if filled or if game over
+                }
+
+                //drop an X or O within square clicked, depending on turn
+                if (turn % 2 === 0) {
+                    square.innerHTML = "<p>X</p>";
+                }
+                else {
+                    square.innerHTML = "<p>O</p>";
+                }
+                //innerHTML just in case I need to keep the HTML formatting beyond plain text later (I did)
+
+                //gotta have turn cycles, so
+                turn++;
+
+                //update the player turn text
+                updateTurnDisplay();
+
+                //call did anyone win or is game borked function? After each turn
+                WinOr();
+            });
+        }
+
+        //win or borked function here
+        function WinOr() {
+            //ngl I got kinda stuck here with map()
+
+            let squares = document.querySelectorAll(".square");
+            let moves = Array.from(squares).map(sq => {
+                let val = sq.innerText.trim();
+                return val === "" ? "-" : val;
+            });
+
+            //I still feel something is off. This is a LOT of win conditions
+            //Is there a better way to use map()?
+            let winConditions =
+                [
+                    moves[0] + moves[1] + moves[2],
+                    moves[3] + moves[4] + moves[5],
+                    moves[6] + moves[7] + moves[8],
+                    moves[0] + moves[3] + moves[6],
+                    moves[1] + moves[4] + moves[7],
+                    moves[2] + moves[5] + moves[8],
+                    moves[0] + moves[4] + moves[8],
+                    moves[2] + moves[4] + moves[6]
+                ];
+            //we're supposed to use numeric valies and not X, O, or -, right?
+            //(according to pg 129 of the slides)
+
+            //Do we have a straight line of OOO or XXX?
+            let winner = null;
+            for (let winloop of winConditions) {
+                if (winloop === "XXX") {
+                    winner = "X";
+                }
+                else if (winloop === "OOO") {
+                    winner = "O";
+                }
+            }
+
+            //if any winner, update display and end game
+            if (winner) {
+                document.querySelector(".win p").textContent = winner + " Wins!";
+                gameOver = true;
+                return;
+            }
+
+            //if no wins, can moves still even be made? Check for hyphens?
+            if (!moves.includes("-")) {
+                document.querySelector(".win p").textContent = "Stalemate!";
+                gameOver = true;
+            }
+        }
+
+        //new script to clear and reset the whole board
+        const StartGameBtn = document.getElementById("StartGameBtn");
+        StartGameBtn.addEventListener("click", function () {
+            //clean squares
+            for (let i = 0; i < 9; i++) {
+                let square = document.getElementById("sq" + i);
+                square.innerHTML = "";
+            }
+
+            //game isn't over now, so
+            gameOver = false;
+
+            //remove winner text
+            document.querySelector(".win p").textContent = "[Winner Here]";
+
+            //randomize X or O turn again
+            turn = Math.floor(Math.random() * 2);
+
+            //and check the player turn display
+            updateTurnDisplay();
+        });
+    </script>
+
+    <br> <!--needed to add some more space-->
+    <hr>
+    DGMD-E28-A2b
+</body>
+</html>
