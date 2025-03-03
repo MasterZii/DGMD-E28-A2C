@@ -1,4 +1,4 @@
-﻿<!-- Alex Miller - ttt5.html -->
+<!-- Alex Miller - ttt5.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,7 +29,8 @@
             <!--creating the new variables within the script-->
             <script>
                 const NUM_SQUARES = 9;
-                for (var i = 0; i < NUM_SQUARES; i++) {
+                for (var i = 0; i < NUM_SQUARES; i++)
+                {
                     var id = "sq" + i;
                     document.write("<div class='square' id='" + id + "'></div>");
                 }
@@ -49,9 +50,11 @@
         var gameOver = false;
 
         //updating player turn display, as before
-        function updateTurnDisplay() {
+        function updateTurnDisplay()
+        {
             var turnDisplay = document.querySelector(".turn p");
-            if (turn % 2 === 0) {
+            if (turn % 2 === 0)
+            {
                 turnDisplay.textContent = "It's X's turn!";
             }
             else {
@@ -62,19 +65,23 @@
         //Random player turn start
         updateTurnDisplay();
 
-        for (let i = 0; i < 9; i++) {
+        for (let i = 0; i < 9; i++)
+        {
             let square = document.getElementById("sq" + i);
             //the single event listener, but for both players now
-            square.addEventListener("click", function () {
+            square.addEventListener("click", function ()
+            {
                 //bye bye buggy popup, good riddance I don't need to fix it now
 
                 //"Hi, is this square still available?" - Facebook Marketplace
-                if (square.innerHTML.trim() !== "" || gameOver) {
+                if (square.innerHTML.trim() !== "" || gameOver)
+                {
                     return; //disallow move if filled or if game over
                 }
 
                 //drop an X or O within square clicked, depending on turn
-                if (turn % 2 === 0) {
+                if (turn % 2 === 0)
+                {
                     square.innerHTML = "<p>X</p>";
                 }
                 else {
@@ -94,11 +101,13 @@
         }
 
         //win or borked function here
-        function WinOr() {
+        function WinOr()
+        {
             //ngl I got kinda stuck here with map()
 
             let squares = document.querySelectorAll(".square");
-            let moves = Array.from(squares).map(sq => {
+            let moves = Array.from(squares).map(sq =>
+            {
                 let val = sq.innerText.trim();
                 return val === "" ? "-" : val;
             });
@@ -121,11 +130,14 @@
 
             //Do we have a straight line of OOO or XXX?
             let winner = null;
-            for (let winloop of winConditions) {
-                if (winloop === "XXX") {
+            for (let winloop of winConditions)
+            {
+                if (winloop === "XXX")
+                {
                     winner = "X";
                 }
-                else if (winloop === "OOO") {
+                else if (winloop === "OOO")
+                {
                     winner = "O";
                 }
             }
@@ -138,7 +150,8 @@
             }
 
             //if no wins, can moves still even be made? Check for hyphens?
-            if (!moves.includes("-")) {
+            if (!moves.includes("-"))
+            {
                 document.querySelector(".win p").textContent = "Stalemate!";
                 gameOver = true;
             }
@@ -146,9 +159,11 @@
 
         //new script to clear and reset the whole board
         const StartGameBtn = document.getElementById("StartGameBtn");
-        StartGameBtn.addEventListener("click", function () {
+        StartGameBtn.addEventListener("click", function ()
+        {
             //clean squares
-            for (let i = 0; i < 9; i++) {
+            for (let i = 0; i < 9; i++)
+            {
                 let square = document.getElementById("sq" + i);
                 square.innerHTML = "";
             }
@@ -169,6 +184,6 @@
 
     <br> <!--needed to add some more space-->
     <hr>
-    DGMD-E28-A2b
+    DGMD-E28-A2c
 </body>
 </html>
